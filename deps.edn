@@ -8,7 +8,10 @@
         aero/aero {:mvn/version "1.1.6"}
         camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"}
         clojure.java-time/clojure.java-time {:mvn/version "0.3.2"}
-        jedi-time/jedi-time {:mvn/version "0.2.1"}}
+        jedi-time/jedi-time {:mvn/version "0.2.1"}
+        honeysql/honeysql {:mvn/version "1.0.444"}
+        nilenso/honeysql-postgres {:mvn/version "0.2.6"}
+        fipp/fipp {:mvn/version "0.6.23"}}
  :aliases
  {:dev {:extra-paths ["dev/src" "test" "dev/resources"]
         :extra-deps {expound/expound {:mvn/version "0.8.7"}
