@@ -1,0 +1,33 @@
+{:paths ["src" "resources"]
+ :deps {org.clojure/clojure {:mvn/version "1.10.2"}
+        metosin/malli {:git/url "https://github.com/metosin/malli.git"
+                       :sha "87bda76223821b3bbe4b722ce0642a991ee92660"}
+        caesarhu/gungnir {:git/url "https://github.com/caesarhu/gungnir.git"
+                          :sha "5326694255befbae066201efc748d4f8f5ac77fa"}
+        juxt/clip {:mvn/version "0.21.0"}
+        aero/aero {:mvn/version "1.1.6"}
+        camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"}
+        clojure.java-time/clojure.java-time {:mvn/version "0.3.2"}
+        jedi-time/jedi-time {:mvn/version "0.2.1"}}
+ :aliases
+ {:dev {:extra-paths ["dev/src" "test" "dev/resources"]
+        :extra-deps {expound/expound {:mvn/version "0.8.7"}
+                     orchestra/orchestra {:mvn/version "2021.01.01-1"}
+                     org.clojure/tools.gitlibs {:mvn/version "1.0.100"}}}
+  :test {:extra-paths ["test"]
+         :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}}}
+  :runner
+  {:extra-deps {com.cognitect/test-runner
+                {:git/url "https://github.com/cognitect-labs/test-runner"
+                 :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}}
+   :main-opts ["-m" "cognitect.test-runner"
+               "-d" "test"]}
+  :jar {:replace-deps {seancorfield/depstar {:mvn/version "2.0.171"}}
+        :exec-fn hf.depstar/jar
+        :exec-args {:jar "gungnir-tools.jar" :sync-pom true}}
+  :install {:replace-deps {slipset/deps-deploy {:mvn/version "0.1.5"}}
+            :exec-fn deps-deploy.deps-deploy/deploy
+            :exec-args {:installer :local :artifact "gungnir-tools.jar"}}
+  :deploy {:replace-deps {slipset/deps-deploy {:mvn/version "0.1.5"}}
+           :exec-fn deps-deploy.deps-deploy/deploy
+           :exec-args {:installer :remote :artifact "gungnir-tools.jar"}}}}
