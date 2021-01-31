@@ -1,6 +1,6 @@
-(ns caesarhu.postgres.enum
+(ns caesarhu.gungnir-tools.postgres.enum
   (:require
-    [caesarhu.utils :as utils]
+    [caesarhu.gungnir-tools.utils :as utils]
     [malli.core :as m]))
 
 (defn get-enum-name

@@ -53,97 +53,97 @@
           ;:enum-name :enum-month-period
           :locale/zh-tw "月薪期別"}
          "上期" "下期"]}
- :gungnir {:employee
-           [:map {:locale/zh-tw "員工基本資料檔"
-                  :create-index [:index-name :idx-employee-by-name
-                                 :table :employee
-                                 :column :name]
-                  :ragtime/id "201-employee"
-                  :has-many {:employee/changes {:model :change :foreign-key :change/employee-id}}}
-            [:employee/id {:primary-key true
-                           :auto true
-                           :locale/zh-tw "id"} pos-int?]
-            [:employee/taiwan-id {:locale/zh-tw "身分證號"
-                                  :unique true} :employee/taiwan-id]
-            [:employee/company-id {:locale/zh-tw "員工編號"
-                                   :unique true} :employee/company-id]
-            [:employee/name {:locale/zh-tw "姓名"} :employee/name]
-            [:employee/birthday {:locale/zh-tw "生日"} :local-date]
-            [:employee/gender {:locale/zh-tw "性別"
-                               :before-save [:enum/as-other]} :enum-gender]
-            [:employee/direct-kind {:locale/zh-tw "間直接"
-                                    :before-save [:enum/as-other]} :enum-direct]
-            [:employee/employee-kind {:locale/zh-tw "員工類別"
-                                      :before-save [:enum/as-other]} :enum-employee]
-            [:employee/price-kind {:locale/zh-tw "費用類別"
-                                   :before-save [:enum/as-other]} :enum-price]
-            [:employee/reg-addr {:locale/zh-tw "戶籍地址"} :employee/reg-addr]
-            [:employee/mail-addr {:locale/zh-tw "通訊地址"
-                                  :optional true} [:maybe :employee/mail-addr]]
-            [:employee/unit-id {:locale/zh-tw "單位代號"} :employee/unit-id]
-            [:employee/bank-id
-             {:locale/zh-tw "銀行代號"
-              :references [:table :bank :column :bank-id :on-delete "RESTRICT" :on-update "CASCADE"]
-              :optional true}
-             [:maybe :employee/bank-id]]
-            [:employee/account {:locale/zh-tw "銀行帳號"
-                                :optional true} [:maybe :employee/account]]
-            [:employee/work-place {:locale/zh-tw "工作地"
-                                   :optional true} [:maybe string?]]
-            [:employee/factory {:locale/zh-tw "廠區"
-                                :optional true} [:maybe string?]]
-            [:employee/job-title {:locale/zh-tw "職稱"
-                                  :optional true} [:maybe string?]]
-            [:employee/job-title-2 {:locale/zh-tw "職稱2"
-                                    :optional true} [:maybe string?]]
-            [:employee/phone {:locale/zh-tw "住家電話"
-                              :optional true} [:maybe :employee/phone]]
-            [:employee/mobile {:locale/zh-tw "行動電話"
-                               :optional true} [:maybe :employee/mobile]]
-            [:employee/education {:locale/zh-tw "學歷"
-                                  :optional true} [:maybe string?]]
-            [:employee/education-period {:locale/zh-tw "修業期間"
-                                         :optional true} [:maybe string?]]
-            [:employee/exception {:locale/zh-tw "特殊狀況例外處理"
-                                  :optional true} [:maybe bytes?]]
-            [:employee/memo {:locale/zh-tw "備註"
-                             :optional true} [:maybe string?]]
-            [:employee/created-at {:locale/zh-tw "建立時間"
-                                   :auto true} :local-date-time]
-            [:employee/updated-at {:locale/zh-tw "修改時間"
-                                   :auto true} :local-date-time]
-            [:employee/bank-name {:locale/zh-tw "員工銀行名稱"
-                                  :virtual true} string?]]
-
-           :change
-           [:map {:locale/zh-tw "員工異動檔"
-                  :ragtime/id "202-change"
-                  :create-index [:index-name :idx-change-by-employee-id
-                                 :table :change
-                                 :column :employee-id]
-                  :belongs-to {:change/employee {:model :employee :foreign-key :change/employee-id}}}
-            [:change/id {:primary-key true
+ :model {:employee
+         [:map {:locale/zh-tw "員工基本資料檔"
+                :create-index [:index-name :idx-employee-by-name
+                               :table :employee
+                               :column :name]
+                :ragtime/id "201-employee"
+                :has-many {:employee/changes {:model :change :foreign-key :change/employee-id}}}
+          [:employee/id {:primary-key true
                          :auto true
                          :locale/zh-tw "id"} pos-int?]
-            [:change/employee-id
-             {:locale/zh-tw "員工基本資料檔id"
-              :references [:table :employee :column :id :on-delete "CASCADE" :on-update "CASCADE"]}
-             pos-int?]
-            [:change/change-kind {:locale/zh-tw "異動類別"
-                                  :before-save [:enum/as-other]} :enum-change]
-            [:change/change-day {:locale/zh-tw "異動日期"
-                                 :default :CURRENT_DATE} :local-date]
-            [:change/created-at {:locale/zh-tw "建立時間"
+          [:employee/taiwan-id {:locale/zh-tw "身分證號"
+                                :unique true} :employee/taiwan-id]
+          [:employee/company-id {:locale/zh-tw "員工編號"
+                                 :unique true} :employee/company-id]
+          [:employee/name {:locale/zh-tw "姓名"} :employee/name]
+          [:employee/birthday {:locale/zh-tw "生日"} :local-date]
+          [:employee/gender {:locale/zh-tw "性別"
+                             :before-save [:enum/as-other]} :enum-gender]
+          [:employee/direct-kind {:locale/zh-tw "間直接"
+                                  :before-save [:enum/as-other]} :enum-direct]
+          [:employee/employee-kind {:locale/zh-tw "員工類別"
+                                    :before-save [:enum/as-other]} :enum-employee]
+          [:employee/price-kind {:locale/zh-tw "費用類別"
+                                 :before-save [:enum/as-other]} :enum-price]
+          [:employee/reg-addr {:locale/zh-tw "戶籍地址"} :employee/reg-addr]
+          [:employee/mail-addr {:locale/zh-tw "通訊地址"
+                                :optional true} [:maybe :employee/mail-addr]]
+          [:employee/unit-id {:locale/zh-tw "單位代號"} :employee/unit-id]
+          [:employee/bank-id
+           {:locale/zh-tw "銀行代號"
+            :references [:table :bank :column :bank-id :on-delete "RESTRICT" :on-update "CASCADE"]
+            :optional true}
+           [:maybe :employee/bank-id]]
+          [:employee/account {:locale/zh-tw "銀行帳號"
+                              :optional true} [:maybe :employee/account]]
+          [:employee/work-place {:locale/zh-tw "工作地"
+                                 :optional true} [:maybe string?]]
+          [:employee/factory {:locale/zh-tw "廠區"
+                              :optional true} [:maybe string?]]
+          [:employee/job-title {:locale/zh-tw "職稱"
+                                :optional true} [:maybe string?]]
+          [:employee/job-title-2 {:locale/zh-tw "職稱2"
+                                  :optional true} [:maybe string?]]
+          [:employee/phone {:locale/zh-tw "住家電話"
+                            :optional true} [:maybe :employee/phone]]
+          [:employee/mobile {:locale/zh-tw "行動電話"
+                             :optional true} [:maybe :employee/mobile]]
+          [:employee/education {:locale/zh-tw "學歷"
+                                :optional true} [:maybe string?]]
+          [:employee/education-period {:locale/zh-tw "修業期間"
+                                       :optional true} [:maybe string?]]
+          [:employee/exception {:locale/zh-tw "特殊狀況例外處理"
+                                :optional true} [:maybe bytes?]]
+          [:employee/memo {:locale/zh-tw "備註"
+                           :optional true} [:maybe string?]]
+          [:employee/created-at {:locale/zh-tw "建立時間"
                                  :auto true} :local-date-time]
-            [:change/memo {:locale/zh-tw "備註"
-                           :optional true} [:maybe string?]]]
+          [:employee/updated-at {:locale/zh-tw "修改時間"
+                                 :auto true} :local-date-time]
+          [:employee/bank-name {:locale/zh-tw "員工銀行名稱"
+                                :virtual true} string?]]
 
-           :bank
-           [:map {:locale/zh-tw "銀行一覽表"
-                  :ragtime/id "200-bank"}
-            [:bank/bank-id {:primary-key true
-                            :locale/zh-tw "銀行代號"} :employee/bank-id]
-            [:bank/name {:locale/zh-tw "銀行名稱"} string?]
-            [:bank/memo {:locale/zh-tw "備註"
-                         :optional true} [:maybe string?]]]}}
+         :change
+         [:map {:locale/zh-tw "員工異動檔"
+                :ragtime/id "202-change"
+                :create-index [:index-name :idx-change-by-employee-id
+                               :table :change
+                               :column :employee-id]
+                :belongs-to {:change/employee {:model :employee :foreign-key :change/employee-id}}}
+          [:change/id {:primary-key true
+                       :auto true
+                       :locale/zh-tw "id"} pos-int?]
+          [:change/employee-id
+           {:locale/zh-tw "員工基本資料檔id"
+            :references [:table :employee :column :id :on-delete "CASCADE" :on-update "CASCADE"]}
+           pos-int?]
+          [:change/change-kind {:locale/zh-tw "異動類別"
+                                :before-save [:enum/as-other]} :enum-change]
+          [:change/change-day {:locale/zh-tw "異動日期"
+                               :default :CURRENT_DATE} :local-date]
+          [:change/created-at {:locale/zh-tw "建立時間"
+                               :auto true} :local-date-time]
+          [:change/memo {:locale/zh-tw "備註"
+                         :optional true} [:maybe string?]]]
+
+         :bank
+         [:map {:locale/zh-tw "銀行一覽表"
+                :ragtime/id "200-bank"}
+          [:bank/bank-id {:primary-key true
+                          :locale/zh-tw "銀行代號"} :employee/bank-id]
+          [:bank/name {:locale/zh-tw "銀行名稱"} string?]
+          [:bank/memo {:locale/zh-tw "備註"
+                       :optional true} [:maybe string?]]]}}
 

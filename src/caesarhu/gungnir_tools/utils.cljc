@@ -1,4 +1,4 @@
-(ns caesarhu.utils
+(ns caesarhu.gungnir-tools.utils
   (:refer-clojure :exclude [pprint format partition-by])
   (:require [fipp.edn :refer [pprint]]
             [honeysql.format :as sqlf])
