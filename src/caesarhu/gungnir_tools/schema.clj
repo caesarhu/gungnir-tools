@@ -1,7 +1,6 @@
 (ns caesarhu.gungnir-tools.schema
-  (:require [aero.core :as aero]
-            [clojure.java.io :as io]
-            [next.jdbc.types :as types]
+  (:require [next.jdbc.types :as types]
+            [caesarhu.gungnir-tools.utils :refer [read-edn-file]]
             [medley.core :as medley]
             [malli.core :as m]
             [malli.util :as mu]
@@ -15,7 +14,7 @@
 
 (defn read-edn-schema
   ([file]
-   (aero/read-config (io/resource file)))
+   (read-edn-file file))
   ([]
    (read-edn-schema schema-edn-file)))
 
@@ -25,7 +24,7 @@
   ([]
    (register-model! schema-edn-file)))
 
-;;; gungnir.model multimethods
+;;; gungnir.model multimethods, only for enum values
 
 (defmethod gm/before-save :enum/as-other [_k v]
   (types/as-other v))
@@ -68,7 +67,7 @@
      (reset! schema-registry* base)
      (mr/set-default-registry! (mr/mutable-registry schema-registry*))
      (register-map! (schema-enums file))
-     (merge base (schema-enums file))))
+     @schema-registry*))
   ([]
    (base-schema schema-edn-file)))
 

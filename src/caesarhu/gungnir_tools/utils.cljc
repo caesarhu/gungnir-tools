@@ -1,9 +1,15 @@
 (ns caesarhu.gungnir-tools.utils
   (:refer-clojure :exclude [pprint format partition-by])
   (:require [fipp.edn :refer [pprint]]
+            [aero.core :as aero]
+            [clojure.java.io :as io]
             [honeysql.format :as sqlf])
   (:import
     (java.io StringWriter)))
+
+(defn read-edn-file
+  [file]
+  (aero/read-config (io/resource file)))
 
 (defn pretty-format
   [obj]

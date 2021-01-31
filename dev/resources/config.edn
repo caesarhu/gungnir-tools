@@ -1,0 +1,2 @@
+{:raw-data {:address-path "raw/address.csv"
+            :bank-data ["raw/twd.txt" "raw/bankno.txt"]}}

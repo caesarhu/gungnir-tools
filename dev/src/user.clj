@@ -10,4 +10,14 @@
             [gungnir.model :as gm]
             [gungnir.query :as gq]
             [aero.core :as aero]
-            [java-time :as jt]))
+            [java-time :as jt]
+            [malli.employee :refer [employee-schema]]
+            [caesarhu.gungnir-tools.schema :as schema]))
+
+(defn init-schema!
+  ([file]
+   (schema/base-schema file)
+   (schema/register-map! employee-schema)
+   (schema/register-model! file))
+  ([]
+   (init-schema! schema/schema-edn-file)))
