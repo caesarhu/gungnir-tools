@@ -8,7 +8,7 @@
 
 (def taiwan-id
   (m/-simple-schema
-    {:type            :taiwan-id
+    {:type            :string
      :pred            tid/some-id?
      :type-properties {:error/message "必須是身分證號或外籍證號"
                        :gen/gen       tid/taiwan-gen}}))
@@ -46,7 +46,7 @@
 
 (def name-schema
   (m/-simple-schema
-    {:type :taiwan-name
+    {:type :string
      :pred string?
      :type-properties {:error/message "必須是姓名-2位以上字串"
                        :gen/gen gen-name}}))
@@ -77,7 +77,7 @@
 
 (def address
   (m/-simple-schema
-    {:type :taiwan-address
+    {:type :string
      :pred string?
      :type-properties {:error/message "必須是地址"
                        :gen/gen addr/gen-address}}))

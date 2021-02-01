@@ -1,6 +1,5 @@
 (ns caesarhu.gungnir-tools.transform
   (:require
-    [malli.core :as m]
     [malli.util :as mu]
     [malli.transform :as mt]
     [caesarhu.gungnir-tools.gungnir.translate :refer [model->dict]]))

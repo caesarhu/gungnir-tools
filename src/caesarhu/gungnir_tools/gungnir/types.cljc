@@ -1,6 +1,6 @@
 (ns caesarhu.gungnir-tools.gungnir.types
   (:require [malli.core :as m]
-            [caesarhu.gungnir-tools.schema :refer [schema-registry*]]
+            [caesarhu.gungnir-tools.schema :refer [schema-registry* is-enum?]]
             [caesarhu.gungnir-tools.postgres.enum :as enum]))
 
 (def postgres-keys
@@ -30,6 +30,14 @@
                               {:cause ::field-type
                                :schema schema}))))))
 
+(defn transform-type
+  [type-table type]
+  (let [transform (fn [[type-set to-type]]
+                    (when (type-set type)
+                      to-type))]
+    (some transform type-table)))
+
+
 (def graphql-type-table
   [[(set [:re :string 'string?]) (symbol :String)]
    [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) (symbol :Int)]
@@ -38,3 +46,12 @@
    [(set [:local-date-time 'inst?]) (symbol :DateTime)]
    [(set [:boolean 'boolean?]) (symbol :Boolean)]
    [(set ['bytes?]) (symbol :String)]])
+
+(defn ->graphql-type
+  [type]
+  (cond
+    (transform-type graphql-type-table type) (transform-type graphql-type-table type)
+    (is-enum? type) (symbol :String)
+    :else (throw (ex-info "field type graphql-type parse error!"
+                          {:cause ::->graphql-type
+                           :type type}))))

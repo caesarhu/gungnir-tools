@@ -1,5 +1,9 @@
 (ns user
-  (:require [malli.core :as m]
+  (:require [clojure.spec.alpha :as s]
+            [expound.alpha :as expound]
+            [orchestra.spec.test :as stest]
+            [juxt.clip.repl :refer [start stop set-init! system]]
+            [malli.core :as m]
             [malli.error :as me]
             [malli.generator :as mg]
             [malli.registry :as mr]
@@ -15,6 +19,7 @@
             [malli.employee :refer [employee-schema]]
             [caesarhu.gungnir-tools.schema :as schema]
             [caesarhu.gungnir-tools.transform :as ct]
+            [caesarhu.gungnir-tools.schema :refer [read-edn-schema]]
             [caesarhu.gungnir-tools.utils :refer [read-edn-file]]))
 
 (defn init-schema!
@@ -25,5 +30,28 @@
   ([]
    (init-schema! schema/schema-edn-file)))
 
+(init-schema!)
+
 (def emp-t
   (read-edn-file "transform.edn"))
+
+;;; expound and Orchestra
+
+(defn unstrument
+  []
+  (stest/unstrument))
+
+
+(defn instrument
+  []
+  (set! s/*explain-out* expound/printer)
+  (with-out-str (stest/instrument))
+  (println "starting strument..."))
+
+(defn reset
+  []
+  (clojure.tools.namespace.repl/set-refresh-dirs "dev/src" "src" "test")
+  (set-init! (fn [] (read-edn-schema)))
+  (juxt.clip.repl/reset)
+  (instrument)
+  (println "Reset finished..."))
