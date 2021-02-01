@@ -1,0 +1,40 @@
+(ns caesarhu.gungnir-tools.gungnir.types
+  (:require [malli.core :as m]
+            [caesarhu.gungnir-tools.schema :refer [schema-registry*]]
+            [caesarhu.gungnir-tools.postgres.enum :as enum]))
+
+(def postgres-keys
+  {:type-key :postgres/type})
+
+(def type-keys
+  (set (concat (keys (m/type-schemas))
+               [:local-date :local-date-time])))
+
+
+(defn field-type
+  [field]
+  (tap> field)
+  (loop [schema (last field)]
+    (let [f-type (or (some-> schema
+                             m/properties
+                             (get (:type-key postgres-keys)))
+                     (m/type schema))]
+      (cond
+        (symbol? f-type) f-type
+        (contains? type-keys f-type) f-type
+        (= :re f-type) f-type
+        (= :enum f-type) (enum/get-enum-name schema)
+        (= :malli.core/schema f-type) (recur (->> schema m/form (get @schema-registry*)))
+        (= :maybe f-type) (recur (->> schema m/children first))
+        :else (throw (ex-info "field type parse error!"
+                              {:cause ::field-type
+                               :schema schema}))))))
+
+(def graphql-type-table
+  [[(set [:re :string 'string?]) (symbol :String)]
+   [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) (symbol :Int)]
+   [(set ['float?, 'double?, 'decimal?, :double]) (symbol :BigDecimal)]
+   [(set [:local-date]) (symbol :Date)]
+   [(set [:local-date-time 'inst?]) (symbol :DateTime)]
+   [(set [:boolean 'boolean?]) (symbol :Boolean)]
+   [(set ['bytes?]) (symbol :String)]])
