@@ -1,0 +1,6 @@
+[:map
+ {:locale/zh-tw "test1"
+  :test "test"}
+ [:employee/id {:locale/zh-tw "test2"} pos-int?]
+ [:employee/taiwan-id {:locale/zh-tw nil} :taiwan-id]
+ [:employee/company-id {:locale/zh-tw "test4"} :employee/company-id]]

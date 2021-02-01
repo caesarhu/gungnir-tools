@@ -3,15 +3,15 @@
     [malli.address :as addr]
     [clojure.test.check.generators :as gen]
     [malli.core :as m]
-    [taiwan-id.core :as id]))
+    [taiwan-id.core :as tid]))
 
 
 (def taiwan-id
   (m/-simple-schema
-    {:type :string
-     :pred id/some-id?
+    {:type            :taiwan-id
+     :pred            tid/some-id?
      :type-properties {:error/message "必須是身分證號或外籍證號"
-                       :gen/gen id/taiwan-gen}}))
+                       :gen/gen       tid/taiwan-gen}}))
 
 
 (def company-id
@@ -46,7 +46,7 @@
 
 (def name-schema
   (m/-simple-schema
-    {:type :string
+    {:type :taiwan-name
      :pred string?
      :type-properties {:error/message "必須是姓名-2位以上字串"
                        :gen/gen gen-name}}))
@@ -77,20 +77,19 @@
 
 (def address
   (m/-simple-schema
-    {:type :string
+    {:type :taiwan-address
      :pred string?
      :type-properties {:error/message "必須是地址"
                        :gen/gen addr/gen-address}}))
 
 
 (def employee-schema
-  {:employee/taiwan-id taiwan-id
+  {:taiwan-id taiwan-id
    :employee/company-id company-id
    :employee/bank-id bank-id
    :employee/account account
-   :employee/name name-schema
+   :taiwan-name name-schema
    :employee/unit-id unit-id
    :employee/phone phone
    :employee/mobile mobile
-   :employee/reg-addr address
-   :employee/mail-addr address})
+   :taiwan-address address})

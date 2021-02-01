@@ -20,6 +20,13 @@
                      orchestra/orchestra {:mvn/version "2021.01.01-1"}
                      org.clojure/tools.gitlibs {:mvn/version "1.0.100"}
                      com.gfredericks/test.chuck {:mvn/version "0.2.10"}
+                     ;;; log
+                     com.taoensso/timbre {:mvn/version "5.1.1"}
+                     com.fzakaria/slf4j-timbre {:mvn/version "0.3.20"}
+                     org.slf4j/jcl-over-slf4j {:mvn/version "1.7.30"}
+                     org.slf4j/log4j-over-slf4j {:mvn/version "1.7.30"}
+                     org.slf4j/jul-to-slf4j {:mvn/version "1.7.30"}
+                     ;;;
                      taiwan-id/taiwan-id {:mvn/version "0.4.1"}}
         :jvm-opts ["-Dmalli.registry/type=custom"]}
   :test {:extra-paths ["test"]

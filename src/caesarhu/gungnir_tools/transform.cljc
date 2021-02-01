@@ -1,39 +1,24 @@
 (ns caesarhu.gungnir-tools.transform
   (:require
     [malli.core :as m]
-    [malli.transform :as mt]))
+    [malli.util :as mu]
+    [malli.transform :as mt]
+    [caesarhu.gungnir-tools.gungnir.translate :refer [model->dict]]))
 
-
-(defn custom-transformer
-  ([]
-   (custom-transformer nil))
-  ([{:keys [key transfers] :or {key :transfer}}]
-   (let [get-transfer (fn [schema]
-                        (let [transfer (some-> schema m/properties key)]
-                          (if (some? transfer) transfer (some->> schema m/type (get transfers) (#(% schema))))))
-         set-transfer {:compile (fn [schema _]
-                                  (if-some [transfer (get-transfer schema)]
-                                    (if (fn? transfer)
-                                      (fn [x] (transfer x))
-                                      (fn [x] transfer))))}
-         add-transfers {:compile (fn [schema _]
-                                   (let [transfers (->> (m/children schema)
-                                                        (keep (fn [[k {transfer key} v]]
-                                                                (if-some [transfer (if (some? transfer) transfer (get-transfer v))]
-                                                                  [k transfer])))
-                                                        (into {}))]
-                                     (if (seq transfers)
-                                       (fn [x]
-                                         (if (map? x)
-                                           (reduce-kv
-                                             (fn [acc k v]
-                                               (if-not (contains? x k)
-                                                 (assoc acc k v)
-                                                 acc))
-                                             x transfers)
-                                           x)))))}]
+(defn union-transformer
+  ([f]
+   (let [transform {:compile (fn [schema _]
+                                 (fn [x]
+                                   (let [union-schema (mu/union schema x)]
+                                     (if (fn? f)
+                                       (f union-schema)
+                                       union-schema))))}]
      (mt/transformer
-       {:default-decoder set-transfer
-        :default-encoder set-transfer}
-       {:decoders {:map add-transfers}
-        :encoders {:map add-transfers}}))))
+       {:decoders {:map transform}
+        :encoders {:map transform}})))
+  ([]
+   (union-transformer nil)))
+
+(defn dict-transformer
+  []
+  #(union-transformer model->dict))

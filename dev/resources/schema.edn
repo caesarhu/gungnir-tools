@@ -64,10 +64,10 @@
                          :auto true
                          :locale/zh-tw "id"} pos-int?]
           [:employee/taiwan-id {:locale/zh-tw "身分證號"
-                                :unique true} :employee/taiwan-id]
+                                :unique true} :taiwan-id]
           [:employee/company-id {:locale/zh-tw "員工編號"
                                  :unique true} :employee/company-id]
-          [:employee/name {:locale/zh-tw "姓名"} :employee/name]
+          [:employee/name {:locale/zh-tw "姓名"} :taiwan-name]
           [:employee/birthday {:locale/zh-tw "生日"} :local-date]
           [:employee/gender {:locale/zh-tw "性別"
                              :before-save [:enum/as-other]} :enum-gender]
@@ -77,9 +77,9 @@
                                     :before-save [:enum/as-other]} :enum-employee]
           [:employee/price-kind {:locale/zh-tw "費用類別"
                                  :before-save [:enum/as-other]} :enum-price]
-          [:employee/reg-addr {:locale/zh-tw "戶籍地址"} :employee/reg-addr]
+          [:employee/reg-addr {:locale/zh-tw "戶籍地址"} :taiwan-address]
           [:employee/mail-addr {:locale/zh-tw "通訊地址"
-                                :optional true} [:maybe :employee/mail-addr]]
+                                :optional true} [:maybe :taiwan-address]]
           [:employee/unit-id {:locale/zh-tw "單位代號"} :employee/unit-id]
           [:employee/bank-id
            {:locale/zh-tw "銀行代號"
