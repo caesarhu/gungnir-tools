@@ -17,9 +17,8 @@
             [aero.core :as aero]
             [java-time :as jt]
             [malli.employee :refer [employee-schema]]
-            [caesarhu.gungnir-tools.schema :as schema]
+            [caesarhu.gungnir-tools.schema :as schema :refer [read-edn-schema]]
             [caesarhu.gungnir-tools.transform :as ct]
-            [caesarhu.gungnir-tools.schema :refer [read-edn-schema]]
             [caesarhu.gungnir-tools.utils :refer [read-edn-file spit-object snake-any-key]]))
 
 (defn init-schema!

@@ -24,11 +24,6 @@
   ([]
    (register-model! schema-edn-file)))
 
-;;; gungnir.model multimethods, only for enum values
-
-(defmethod gm/before-save :enum/as-other [_k v]
-  (types/as-other v))
-
 ;;; emuns def
 
 (defn schema-enums
