@@ -16,6 +16,7 @@
             [gungnir.query :as gq]
             [aero.core :as aero]
             [java-time :as jt]
+            [malli.time :refer [time-schema]]
             [malli.employee :refer [employee-schema]]
             [caesarhu.gungnir-tools.schema :as schema :refer [read-edn-schema]]
             [caesarhu.gungnir-tools.transform :as ct]
@@ -24,12 +25,13 @@
 (defn init-schema!
   ([file]
    (schema/base-schema file)
+   (schema/register-map! time-schema)
    (schema/register-map! employee-schema)
    (schema/register-model! file))
   ([]
    (init-schema! schema/schema-edn-file)))
 
-(init-schema!)
+;(init-schema!)
 
 (def emp-t
   (read-edn-file "transform.edn"))
@@ -52,5 +54,6 @@
   (clojure.tools.namespace.repl/set-refresh-dirs "dev/src" "src" "test")
   (set-init! (fn [] (read-edn-schema)))
   (juxt.clip.repl/reset)
+  (init-schema!)
   (instrument)
   (println "Reset finished..."))

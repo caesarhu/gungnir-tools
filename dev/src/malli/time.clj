@@ -1,4 +1,4 @@
-(ns caesarhu.gungnir-tools.malli.time
+(ns malli.time
   (:require
     [clojure.test.check.generators :as gen]
     [java-time :as jt]

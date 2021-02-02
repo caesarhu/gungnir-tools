@@ -1,14 +1,12 @@
 (ns caesarhu.gungnir-tools.schema
-  (:require [next.jdbc.types :as types]
-            [caesarhu.gungnir-tools.utils :refer [read-edn-file]]
+  (:require [caesarhu.gungnir-tools.utils :refer [read-edn-file]]
             [medley.core :as medley]
             [malli.core :as m]
             [malli.util :as mu]
             [malli.registry :as mr]
-            [gungnir.model :as gm]
-            [caesarhu.gungnir-tools.malli.time :as time]))
+            [gungnir.model :as gm]))
 
-(def schema-registry* (atom nil))
+(defonce schema-registry* (atom nil))
 
 (def schema-edn-file "schema.edn")
 
@@ -57,12 +55,10 @@
 
 (defn base-schema
   ([file]
-   (let [base (merge (m/default-schemas)
-                     time/time-schema)]
-     (reset! schema-registry* base)
-     (mr/set-default-registry! (mr/mutable-registry schema-registry*))
-     (register-map! (schema-enums file))
-     @schema-registry*))
+   (reset! schema-registry* (m/default-schemas))
+   (mr/set-default-registry! (mr/mutable-registry schema-registry*))
+   (register-map! (schema-enums file))
+   @schema-registry*)
   ([]
    (base-schema schema-edn-file)))
 
