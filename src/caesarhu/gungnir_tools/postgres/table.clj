@@ -107,3 +107,9 @@
     (if id
       (assoc base :id id)
       base)))
+
+(defn models-table-edn
+  ([models]
+   (map generate-table-edn models))
+  ([]
+   (models-table-edn (vals @gm/models))))
