@@ -31,11 +31,6 @@
   ([]
    (init-schema! schema/schema-edn-file)))
 
-;(init-schema!)
-
-(def emp-t
-  (read-edn-file "transform.edn"))
-
 ;;; expound and Orchestra
 
 (defn unstrument
