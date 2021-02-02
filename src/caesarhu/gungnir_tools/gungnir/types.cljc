@@ -1,27 +1,19 @@
 (ns caesarhu.gungnir-tools.gungnir.types
   (:require [malli.core :as m]
             [caesarhu.gungnir-tools.schema :refer [schema-registry* is-enum?]]
-            [caesarhu.gungnir-tools.postgres.enum :as enum]))
-
-(def postgres-keys
-  {:type-key :postgres/type})
-
-(def type-keys
-  (set (concat (keys (m/type-schemas))
-               [:local-date :local-date-time])))
-
+            [caesarhu.gungnir-tools.postgres.enum :as enum]
+            [caesarhu.gungnir-tools.config :refer [postgres-keys* malli-type-keys*]]))
 
 (defn field-type
   [field]
-  (tap> field)
   (loop [schema (last field)]
     (let [f-type (or (some-> schema
                              m/properties
-                             (get (:type-key postgres-keys)))
+                             (get (:type-key @postgres-keys*)))
                      (m/type schema))]
       (cond
         (symbol? f-type) f-type
-        (contains? type-keys f-type) f-type
+        (contains? @malli-type-keys* f-type) f-type
         (= :re f-type) f-type
         (= :enum f-type) (enum/get-enum-name schema)
         (= :malli.core/schema f-type) (recur (->> schema m/form (get @schema-registry*)))

@@ -2,7 +2,8 @@
   (:require
     [malli.util :as mu]
     [malli.transform :as mt]
-    [caesarhu.gungnir-tools.gungnir.translate :refer [model->dict]]))
+    [caesarhu.gungnir-tools.gungnir.translate :refer [model->dict]]
+    [caesarhu.gungnir-tools.lacinia :refer [model->object]]))
 
 (defn union-transformer
   ([f]
@@ -21,3 +22,7 @@
 (defn dict-transformer
   []
   #(union-transformer model->dict))
+
+(defn lacinia-transformer
+  []
+  #(union-transformer model->object))
