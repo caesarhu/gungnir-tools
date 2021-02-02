@@ -44,6 +44,24 @@
   (cond
     (transform-type graphql-type-table type) (transform-type graphql-type-table type)
     (is-enum? type) (symbol :String)
-    :else (throw (ex-info "field type graphql-type parse error!"
+    :else (throw (ex-info "field graphql-type parse error!"
                           {:cause ::->graphql-type
+                           :type type}))))
+
+(def postgres-type-table
+  [[(set [:re :string 'string?]) :text]
+   [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) :bigint]
+   [(set ['float?, 'double?, 'decimal?, :double]) :decimal]
+   [(set [:local-date]) :date]
+   [(set [:local-date-time 'inst?]) :timestamp]
+   [(set [:boolean 'boolean?]) :boolean]
+   [(set ['bytes?]) :bytea]])
+
+(defn ->postgres-type
+  [type]
+  (cond
+    (transform-type postgres-type-table type) (transform-type postgres-type-table type)
+    (is-enum? type) type
+    :else (throw (ex-info "field postgres-type parse error!"
+                          {:cause ::>postgres-type
                            :type type}))))

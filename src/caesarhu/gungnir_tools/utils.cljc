@@ -51,7 +51,7 @@
     (sqlf/to-sql arg)))
 
 (defn transform-any-key
-  "將函數f作用於coll中所有keyword，包含keys and vlas."
+  "將函數f作用於coll中所有keyword，包含keys and vals."
   [coll f]
   (st/transform (st/walker keyword?) f coll))
 

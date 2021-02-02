@@ -1,6 +1,7 @@
 (ns caesarhu.gungnir-tools.postgres.enum
   (:require
     [caesarhu.gungnir-tools.utils :as utils]
+    [caesarhu.gungnir-tools.config :refer [ragtime-key*]]
     [malli.core :as m]))
 
 (defn get-enum-name
@@ -35,16 +36,8 @@
   [enum]
   (let [base {:up (vector (create-enum enum))
               :down (vector (drop-enum enum))}
-        id (get (m/properties enum) :ragtime/id)]
+        id (get (m/properties enum) @ragtime-key*)]
     (if id
       (assoc base :id id)
       base)))
 
-
-(defn spit-enum-edn
-  ([path enum]
-   (spit path (utils/pretty-format (generate-enum-edn enum))))
-  ([enum]
-   (let [dir (str "resources/migrations")
-         path (str dir "/" (get (m/properties enum) :id) ".edn")]
-     (spit-enum-edn path enum))))

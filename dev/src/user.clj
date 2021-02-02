@@ -20,7 +20,7 @@
             [caesarhu.gungnir-tools.schema :as schema]
             [caesarhu.gungnir-tools.transform :as ct]
             [caesarhu.gungnir-tools.schema :refer [read-edn-schema]]
-            [caesarhu.gungnir-tools.utils :refer [read-edn-file]]))
+            [caesarhu.gungnir-tools.utils :refer [read-edn-file spit-object snake-any-key]]))
 
 (defn init-schema!
   ([file]

@@ -5,7 +5,11 @@
   (atom :locale/zh-tw))
 
 (def postgres-keys*
-  (atom {:type-key :postgres/type}))
+  (atom {:type-key :postgres/type
+         :column-call-set (set [:primary-key :unique :default :references])}))
+
+(def ragtime-key*
+  (atom :ragtime/id))
 
 (def malli-type-keys*
   (atom (set (concat (keys (m/type-schemas))
