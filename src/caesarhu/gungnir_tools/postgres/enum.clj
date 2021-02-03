@@ -2,7 +2,8 @@
   (:require
     [caesarhu.gungnir-tools.utils :as utils]
     [caesarhu.gungnir-tools.config :refer [ragtime-key*]]
-    [malli.core :as m]))
+    [malli.core :as m]
+    [caesarhu.gungnir-tools.schema :refer [schema-enums]]))
 
 (defn get-enum-name
   [enum]
@@ -41,3 +42,8 @@
       (assoc base :id id)
       base)))
 
+(defn models-enum-edn
+  ([enums]
+   (map generate-enum-edn enums))
+  ([]
+   (models-enum-edn (vals (schema-enums)))))
