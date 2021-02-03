@@ -5,7 +5,10 @@
             [clojure.java.io :as io]
             [honeysql.format :as sqlf]
             [com.rpl.specter :as st]
-            [camel-snake-kebab.core :as csk])
+            [camel-snake-kebab.core :as csk]
+            [gungnir.model :as gm]
+            [gungnir.field :as gf])
+
   (:import
     (java.io StringWriter)))
 
@@ -58,3 +61,20 @@
 (defn snake-any-key
   [coll]
   (transform-any-key coll csk/->snake_case_keyword))
+
+(defn not-upsert?
+  [field]
+  (let [{:keys [primary-key auto virtual]} (gf/properties field)]
+    (or virtual
+        (and auto
+             (not primary-key)))))
+
+(defn not-upsert-fields
+  [model]
+  (let [{:keys [has-many belongs-to]} (gm/properties model)]
+    (->> model
+         gm/keys
+         (map #(gm/child model %))
+         (filter not-upsert?)
+         (map first)
+         (concat (keys has-many) (keys belongs-to)))))
