@@ -64,9 +64,9 @@
                          :auto true
                          :locale/zh-tw "id"} pos-int?]
           [:employee/taiwan-id {:locale/zh-tw "身分證號"
-                                :unique true} :taiwan-id]
+                                :postgres/unique true} :taiwan-id]
           [:employee/company-id {:locale/zh-tw "員工編號"
-                                 :unique true} :employee/company-id]
+                                 :postgres/unique true} :employee/company-id]
           [:employee/name {:locale/zh-tw "姓名"} :taiwan-name]
           [:employee/birthday {:locale/zh-tw "生日"} :local-date]
           [:employee/gender {:locale/zh-tw "性別"
@@ -83,7 +83,7 @@
           [:employee/unit-id {:locale/zh-tw "單位代號"} :employee/unit-id]
           [:employee/bank-id
            {:locale/zh-tw "銀行代號"
-            :references [:table :bank :column :bank-id :on-delete "RESTRICT" :on-update "CASCADE"]
+            :postgres/references [:table :bank :column :bank-id :on-delete "RESTRICT" :on-update "CASCADE"]
             :optional true}
            [:maybe :employee/bank-id]]
           [:employee/account {:locale/zh-tw "銀行帳號"
@@ -127,12 +127,12 @@
                        :locale/zh-tw "id"} pos-int?]
           [:change/employee-id
            {:locale/zh-tw "員工基本資料檔id"
-            :references [:table :employee :column :id :on-delete "CASCADE" :on-update "CASCADE"]}
+            :postgres/references [:table :employee :column :id :on-delete "CASCADE" :on-update "CASCADE"]}
            pos-int?]
           [:change/change-kind {:locale/zh-tw "異動類別"
                                 :before-save [:enum/as-other]} :enum-change]
           [:change/change-day {:locale/zh-tw "異動日期"
-                               :default :CURRENT_DATE} :local-date]
+                               :postgres/default :CURRENT_DATE} :local-date]
           [:change/created-at {:locale/zh-tw "建立時間"
                                :auto true} :local-date-time]
           [:change/memo {:locale/zh-tw "備註"

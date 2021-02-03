@@ -46,9 +46,12 @@
 (defn reset
   []
   (clojure.tools.namespace.repl/set-refresh-dirs "dev/src" "src" "test")
-  (set-init! (fn []))
+  (set-init! (fn [] (read-tools-schema)))
   (juxt.clip.repl/reset)
   (read-tools-schema)
   (init-schema!)
   (instrument)
   (println "Reset finished..."))
+
+(read-tools-schema)
+(init-schema!)

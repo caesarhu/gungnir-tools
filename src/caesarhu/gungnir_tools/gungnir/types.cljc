@@ -3,15 +3,14 @@
             [malli.registry :as mr]
             [caesarhu.gungnir-tools.schema :refer [get-schemas is-enum?]]
             [caesarhu.gungnir-tools.postgres.enum :as enum]
-            [caesarhu.gungnir-tools.config :refer [postgres-keys* malli-type-keys*]]))
+            [caesarhu.gungnir-tools.config :refer [postgres-keys* malli-type-keys* assign-type-key*]]))
 
 (defn field-type
   [field]
   (loop [schema (last field)]
-    (tap> schema)
     (let [f-type (or (some-> schema
                              m/properties
-                             (get (:type-key @postgres-keys*)))
+                             (get @assign-type-key*))
                      (m/type schema))]
       (cond
         (symbol? f-type) f-type

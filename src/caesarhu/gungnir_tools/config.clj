@@ -10,9 +10,11 @@
 (defonce translate-key*
   (atom :locale/zh-tw))
 
+(defonce assign-type-key*
+  (atom :postgres/type))
+
 (defonce postgres-keys*
-  (atom {:type-key :postgres/type
-         :column-call-set (set [:primary-key :unique :default :references])}))
+  (atom {:column-call-set (set [:primary-key :postgres/unique :postgres/default :postgres/references])}))
 
 (defonce ragtime-key*
   (atom :ragtime/id))
