@@ -45,12 +45,11 @@
 (defn models->objects
   ([models]
    (->> models
-        vals
         (map model->object)
         (apply merge)
         (hash-map :objects)))
   ([]
-   (models->objects @gm/models)))
+   (models->objects (vals @gm/models))))
 
 (defn models-with-query
   ([models query]

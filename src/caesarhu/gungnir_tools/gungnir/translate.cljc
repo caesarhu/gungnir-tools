@@ -25,11 +25,10 @@
 (defn models->dict
   ([models]
    (->> models
-        vals
         (map model->dict)
         (apply merge)))
   ([]
-   (models->dict @gm/models)))
+   (models->dict (vals @gm/models))))
 
 (defn translate
   [dict k]

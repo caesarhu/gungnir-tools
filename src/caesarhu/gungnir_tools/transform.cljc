@@ -3,7 +3,8 @@
     [malli.util :as mu]
     [malli.transform :as mt]
     [caesarhu.gungnir-tools.gungnir.translate :refer [model->dict]]
-    [caesarhu.gungnir-tools.lacinia :refer [model->object]]))
+    [caesarhu.gungnir-tools.lacinia :refer [model->object]]
+    [caesarhu.gungnir-tools.postgres.table :refer [generate-table-edn]]))
 
 (defn union-transformer
   ([f]
@@ -26,3 +27,7 @@
 (defn lacinia-transformer
   []
   #(union-transformer model->object))
+
+(defn postgres-transformer
+  []
+  #(union-transformer generate-table-edn))

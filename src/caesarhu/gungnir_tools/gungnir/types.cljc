@@ -1,6 +1,7 @@
 (ns caesarhu.gungnir-tools.gungnir.types
   (:require [malli.core :as m]
-            [caesarhu.gungnir-tools.schema :refer [schema-registry* is-enum?]]
+            [malli.registry :as mr]
+            [caesarhu.gungnir-tools.schema :refer [get-schemas is-enum?]]
             [caesarhu.gungnir-tools.postgres.enum :as enum]
             [caesarhu.gungnir-tools.config :refer [postgres-keys* malli-type-keys*]]))
 
@@ -16,7 +17,7 @@
         (contains? @malli-type-keys* f-type) f-type
         (= :re f-type) f-type
         (= :enum f-type) (enum/get-enum-name schema)
-        (= :malli.core/schema f-type) (recur (->> schema m/form (get @schema-registry*)))
+        (= :malli.core/schema f-type) (recur (->> schema m/form (get (get-schemas))))
         (= :maybe f-type) (recur (->> schema m/children first))
         :else (throw (ex-info "field type parse error!"
                               {:cause ::field-type

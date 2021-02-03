@@ -18,18 +18,17 @@
             [java-time :as jt]
             [malli.time :refer [time-schema]]
             [malli.employee :refer [employee-schema]]
-            [caesarhu.gungnir-tools.schema :as schema :refer [read-edn-schema]]
+            [caesarhu.gungnir-tools.config :as config]
+            [caesarhu.gungnir-tools.schema :as schema :refer [read-tools-schema]]
             [caesarhu.gungnir-tools.transform :as ct]
             [caesarhu.gungnir-tools.utils :refer [read-edn-file spit-object snake-any-key]]))
 
 (defn init-schema!
-  ([file]
-   (schema/base-schema file)
-   (schema/register-map! time-schema)
-   (schema/register-map! employee-schema)
-   (schema/register-model! file))
-  ([]
-   (init-schema! schema/schema-edn-file)))
+  []
+  (schema/base-schema)
+  (schema/register-map! time-schema)
+  (schema/register-map! employee-schema)
+  (schema/register-model!))
 
 ;;; expound and Orchestra
 
@@ -47,8 +46,9 @@
 (defn reset
   []
   (clojure.tools.namespace.repl/set-refresh-dirs "dev/src" "src" "test")
-  (set-init! (fn [] (read-edn-schema)))
+  (set-init! (fn []))
   (juxt.clip.repl/reset)
+  (read-tools-schema)
   (init-schema!)
   (instrument)
   (println "Reset finished..."))

@@ -1,37 +1,30 @@
 (ns caesarhu.gungnir-tools.schema
   (:require [caesarhu.gungnir-tools.utils :refer [read-edn-file]]
+            [caesarhu.gungnir-tools.config :as config]
             [medley.core :as medley]
             [malli.core :as m]
             [malli.util :as mu]
             [malli.registry :as mr]
             [gungnir.model :as gm]))
 
-(defonce schema-registry* (atom nil))
-
-(def schema-edn-file "schema.edn")
-
-(defn read-edn-schema
+(defn read-tools-schema
   ([file]
-   (read-edn-file file))
+   (reset! config/tools-schema* (read-edn-file file)))
   ([]
-   (read-edn-schema schema-edn-file)))
+   (read-tools-schema @config/schema-edn-file*)))
 
 (defn register-model!
-  ([file]
-   (gm/register! (:model (read-edn-schema file))))
-  ([]
-   (register-model! schema-edn-file)))
+  []
+  (gm/register! (:model @config/tools-schema*)))
 
 ;;; emuns def
 
 (defn schema-enums
-  ([file]
-   (medley/map-kv-vals
-     (fn [k v]
-       (mu/update-properties v assoc :enum-name k))
-     (:enum (read-edn-schema file))))
-  ([]
-   (schema-enums schema-edn-file)))
+  []
+  (medley/map-kv-vals
+    (fn [k v]
+      (mu/update-properties v assoc :enum-name k))
+    (:enum @config/tools-schema*)))
 
 (defn enum-keys-set
   []
@@ -46,19 +39,20 @@
 
 (defn register-type!
   [type ?schema]
-  (swap! schema-registry* assoc type ?schema))
+  (swap! config/schema-registry* assoc type ?schema))
 
 
 (defn register-map!
   [m]
-  (swap! schema-registry* merge m))
+  (swap! config/schema-registry* merge m))
 
 (defn base-schema
-  ([file]
-   (reset! schema-registry* (m/default-schemas))
-   (mr/set-default-registry! (mr/mutable-registry schema-registry*))
-   (register-map! (schema-enums file))
-   @schema-registry*)
-  ([]
-   (base-schema schema-edn-file)))
+  []
+  (reset! config/schema-registry* (m/default-schemas))
+  (mr/set-default-registry! (mr/mutable-registry config/schema-registry*))
+  (register-map! (schema-enums))
+  @config/schema-registry*)
 
+(defn get-schemas
+  []
+  (mr/schemas m/default-registry))

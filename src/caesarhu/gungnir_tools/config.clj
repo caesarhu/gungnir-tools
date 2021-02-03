@@ -1,6 +1,12 @@
 (ns caesarhu.gungnir-tools.config
   (:require [malli.core :as m]))
 
+(defonce schema-registry* (atom nil))
+
+(defonce schema-edn-file* (atom "schema.edn"))
+
+(defonce tools-schema* (atom nil))
+
 (defonce translate-key*
   (atom :locale/zh-tw))
 
