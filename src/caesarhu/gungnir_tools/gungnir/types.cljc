@@ -8,6 +8,7 @@
 (defn field-type
   [field]
   (loop [schema (last field)]
+    (tap> schema)
     (let [f-type (or (some-> schema
                              m/properties
                              (get (:type-key @postgres-keys*)))
@@ -17,7 +18,8 @@
         (contains? @malli-type-keys* f-type) f-type
         (= :re f-type) f-type
         (= :enum f-type) (enum/get-enum-name schema)
-        (= :malli.core/schema f-type) (recur (->> schema m/form (get (get-schemas))))
+        ;(= :malli.core/schema f-type) (recur (->> schema m/form (get (get-schemas))))
+        (= :malli.core/schema f-type) (recur (mr/schema m/default-registry (m/form schema)))
         (= :maybe f-type) (recur (->> schema m/children first))
         :else (throw (ex-info "field type parse error!"
                               {:cause ::field-type
