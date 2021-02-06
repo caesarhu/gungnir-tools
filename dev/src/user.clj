@@ -23,6 +23,8 @@
             [caesarhu.gungnir-tools.transform :as ct]
             [caesarhu.gungnir-tools.utils :refer [read-edn-file spit-object snake-any-key]]))
 
+(def schema-file "schema.edn")
+
 (defn init-schema!
   []
   (schema/base-schema)
@@ -46,12 +48,13 @@
 (defn reset
   []
   (clojure.tools.namespace.repl/set-refresh-dirs "dev/src" "src" "test")
-  (set-init! (fn [] (read-tools-schema)))
+  (set-init! (fn [] (read-tools-schema schema-file)))
   (juxt.clip.repl/reset)
-  (read-tools-schema)
+  (read-tools-schema schema-file)
   (init-schema!)
   (instrument)
   (println "Reset finished..."))
 
-(read-tools-schema)
+(read-tools-schema schema-file)
 (init-schema!)
+;(instrument)

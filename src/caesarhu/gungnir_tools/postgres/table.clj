@@ -7,7 +7,9 @@
             [gungnir.model :as gm]
             [gungnir.field :as gf]
             [honeysql-postgres.helpers :as psqlh]
-            [caesarhu.gungnir-tools.utils :as utils]))
+            [caesarhu.gungnir-tools.utils :as utils]
+            [clojure.spec.alpha :as s]
+            [gungnir.spec]))
 
 (defn field->postgres-type
   [field]
@@ -63,6 +65,9 @@
            flatten
            vec))))
 
+(s/fdef model-columns
+  :args (s/cat :model :gungnir/model)
+  :ret (s/coll-of vector?))
 (defn model-columns
   [model]
   (->> model
@@ -71,6 +76,9 @@
        (map field->column)
        (filter some?)))
 
+(s/fdef create-table
+  :args (s/cat :model :gungnir/model)
+  :ret string?)
 (defn create-table
   [model]
   (let [sql-map (-> (psqlh/create-table {} (gm/table model))
@@ -79,12 +87,18 @@
         first
         (str ";"))))
 
+(s/fdef drop-table
+  :args (s/cat :model :gungnir/model)
+  :ret string?)
 (defn drop-table
   [model]
   (str "DROP TABLE IF EXISTS "
        (-> model gm/table utils/to-sql-arg)
        " CASCADE;"))
 
+(s/fdef create-index
+  :args (s/cat :model :gungnir/model)
+  :ret (s/coll-of string?))
 (defn create-index
   [model]
   (when-let [index-property (-> (gm/properties model)
@@ -96,6 +110,9 @@
       (->> (apply sql/call :create-index index-property)
            sql/format))))
 
+(s/fdef generate-table-edn
+  :args (s/cat :model :gungnir/model)
+  :ret (s/map-of keyword? any?))
 (defn generate-table-edn
   [model]
   (let [base {:up (->> (vector (create-table model) (create-index model))
@@ -108,6 +125,12 @@
       (assoc base :id id)
       base)))
 
+(s/fdef models-table-edn
+  :args (s/alt :1arity
+               (s/cat :models (s/coll-of :gungnir/model))
+               :0arity
+               (s/cat))
+  :ret (s/coll-of map?))
 (defn models-table-edn
   ([models]
    (map generate-table-edn models))

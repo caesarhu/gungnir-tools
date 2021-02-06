@@ -1,6 +1,8 @@
 (ns caesarhu.gungnir-tools.utils
   (:refer-clojure :exclude [pprint format partition-by])
   (:require [fipp.edn :refer [pprint]]
+            [clojure.spec.alpha :as s]
+            [gungnir.spec]
             [aero.core :as aero]
             [clojure.java.io :as io]
             [honeysql.format :as sqlf]
@@ -69,6 +71,9 @@
         (and auto
              (not primary-key)))))
 
+(s/fdef not-upsert-fields
+  :args (s/cat :model :gungnir/model)
+  :ret (s/coll-of keyword?))
 (defn not-upsert-fields
   [model]
   (let [{:keys [has-many belongs-to]} (gm/properties model)]

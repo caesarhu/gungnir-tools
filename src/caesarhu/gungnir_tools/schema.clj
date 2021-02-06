@@ -8,10 +8,8 @@
             [gungnir.model :as gm]))
 
 (defn read-tools-schema
-  ([file]
-   (reset! config/tools-schema* (read-edn-file file)))
-  ([]
-   (read-tools-schema @config/schema-edn-file*)))
+  [file]
+  (reset! config/tools-schema* (read-edn-file file)))
 
 (defn register-model!
   []
@@ -38,7 +36,7 @@
 ;;; register function
 
 (defn register-type!
-  [type ?schema]
+  [?schema type]
   (swap! config/schema-registry* assoc type ?schema))
 
 
