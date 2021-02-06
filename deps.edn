@@ -1,7 +1,7 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.10.2"}
         metosin/malli {:git/url "https://github.com/metosin/malli.git"
-                       :sha "87bda76223821b3bbe4b722ce0642a991ee92660"}
+                       :sha "37648647797fa433a5d907897617b110ed75c9d9"}
         caesarhu/unqualify {:git/url "https://github.com/caesarhu/unqualify.git"
                             :sha "f07af40ba6f994571bb5f7402cfa91dfdb06b28e"}
         kwrooijen/gungnir {:mvn/version "0.0.1-SNAPSHOT"}
@@ -23,7 +23,7 @@
                      com.gfredericks/test.chuck {:mvn/version "0.2.10"}
                      jedi-time/jedi-time {:mvn/version "0.2.1"}
                      ;;; log
-                     com.taoensso/timbre {:mvn/version "5.1.1"}
+                     com.taoensso/timbre {:mvn/version "5.1.2"}
                      com.fzakaria/slf4j-timbre {:mvn/version "0.3.20"}
                      org.slf4j/jcl-over-slf4j {:mvn/version "1.7.30"}
                      org.slf4j/log4j-over-slf4j {:mvn/version "1.7.30"}
