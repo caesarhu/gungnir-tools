@@ -9,8 +9,7 @@
             [gungnir.field :as gf]))
 
 (s/fdef ->graphql-field
-  :args (s/cat :field :gungnir.model/field)
-  :ret map?)
+  :args (s/cat :field :gungnir.model/field))
 (defn ->graphql-field
   [field]
   (let [{:keys [locale/zh-tw optional]} (gf/properties field)
@@ -23,8 +22,7 @@
     (hash-map (first field) {:type graphql-type :description zh-tw})))
 
 (s/fdef relations
-  :args (s/cat :model :gungnir/model)
-  :ret (s/nilable map?))
+  :args (s/cat :model :gungnir/model))
 (defn relations
   [model]
   (let [{:keys [has-many has-one belongs-to]} (gm/properties model)
@@ -40,8 +38,7 @@
          (apply merge))))
 
 (s/fdef model->object
-  :args (s/cat :model :gungnir/model)
-  :ret map?)
+  :args (s/cat :model :gungnir/model))
 (defn model->object
   [model]
   (let [desc (@translate-key* (gm/properties model))]
@@ -57,8 +54,7 @@
   :args (s/alt :1arity
                (s/cat :models (s/coll-of :gungnir/model))
                :0arity
-               (s/cat))
-  :ret (s/nilable map?))
+               (s/cat)))
 (defn models->objects
   ([models]
    (->> models

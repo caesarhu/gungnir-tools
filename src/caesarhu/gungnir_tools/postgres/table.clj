@@ -66,8 +66,7 @@
            vec))))
 
 (s/fdef model-columns
-  :args (s/cat :model :gungnir/model)
-  :ret (s/coll-of vector?))
+  :args (s/cat :model :gungnir/model))
 (defn model-columns
   [model]
   (->> model
@@ -77,8 +76,7 @@
        (filter some?)))
 
 (s/fdef create-table
-  :args (s/cat :model :gungnir/model)
-  :ret string?)
+  :args (s/cat :model :gungnir/model))
 (defn create-table
   [model]
   (let [sql-map (-> (psqlh/create-table {} (gm/table model))
@@ -88,8 +86,7 @@
         (str ";"))))
 
 (s/fdef drop-table
-  :args (s/cat :model :gungnir/model)
-  :ret string?)
+  :args (s/cat :model :gungnir/model))
 (defn drop-table
   [model]
   (str "DROP TABLE IF EXISTS "
@@ -97,8 +94,7 @@
        " CASCADE;"))
 
 (s/fdef create-index
-  :args (s/cat :model :gungnir/model)
-  :ret (s/coll-of string?))
+  :args (s/cat :model :gungnir/model))
 (defn create-index
   [model]
   (when-let [index-property (-> (gm/properties model)
@@ -111,8 +107,7 @@
            sql/format))))
 
 (s/fdef generate-table-edn
-  :args (s/cat :model :gungnir/model)
-  :ret (s/map-of keyword? any?))
+  :args (s/cat :model :gungnir/model))
 (defn generate-table-edn
   [model]
   (let [base {:up (->> (vector (create-table model) (create-index model))
@@ -125,13 +120,11 @@
       (assoc base :id id)
       base)))
 
-(comment
-  (s/fdef models-table-edn
-    :args (s/alt :1arity
-                 (s/cat :models (s/coll-of :gungnir/model))
-                 :0arity
-                 (s/cat))
-    :ret (s/nilable (s/coll-of map?))))
+(s/fdef models-table-edn
+  :args (s/alt :1arity
+               (s/cat :models (s/coll-of :gungnir/model))
+               :0arity
+               (s/cat)))
 (defn models-table-edn
   ([models]
    (map generate-table-edn models))
