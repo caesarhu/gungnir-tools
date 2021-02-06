@@ -130,7 +130,7 @@
                (s/cat :models (s/coll-of :gungnir/model))
                :0arity
                (s/cat))
-  :ret (s/coll-of map?))
+  :ret (s/nilable (s/coll-of map?)))
 (defn models-table-edn
   ([models]
    (map generate-table-edn models))

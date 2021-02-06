@@ -58,7 +58,7 @@
                (s/cat :models (s/coll-of :gungnir/model))
                :0arity
                (s/cat))
-  :ret map?)
+  :ret (s/nilable map?))
 (defn models->objects
   ([models]
    (->> models
