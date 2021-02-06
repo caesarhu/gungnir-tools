@@ -125,12 +125,13 @@
       (assoc base :id id)
       base)))
 
-(s/fdef models-table-edn
-  :args (s/alt :1arity
-               (s/cat :models (s/coll-of :gungnir/model))
-               :0arity
-               (s/cat))
-  :ret (s/nilable (s/coll-of map?)))
+(comment
+  (s/fdef models-table-edn
+    :args (s/alt :1arity
+                 (s/cat :models (s/coll-of :gungnir/model))
+                 :0arity
+                 (s/cat))
+    :ret (s/nilable (s/coll-of map?))))
 (defn models-table-edn
   ([models]
    (map generate-table-edn models))
