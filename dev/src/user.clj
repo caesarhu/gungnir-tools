@@ -16,12 +16,19 @@
             [gungnir.query :as gq]
             [aero.core :as aero]
             [java-time :as jt]
+            [kaocha.repl :as k]
             [malli.time :refer [time-schema]]
             [malli.employee :refer [employee-schema]]
             [caesarhu.gungnir-tools.config :as config]
             [caesarhu.gungnir-tools.schema :as schema :refer [read-tools-schema]]
             [caesarhu.gungnir-tools.transform :as ct]
             [caesarhu.gungnir-tools.utils :refer [read-edn-file spit-object snake-any-key]]))
+
+;;; test
+
+(defn unit-test
+  []
+  (k/run :unit))
 
 (def schema-file "schema.edn")
 

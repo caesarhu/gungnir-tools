@@ -1,7 +1,7 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.10.2"}
         metosin/malli {:git/url "https://github.com/metosin/malli.git"
-                       :sha "37648647797fa433a5d907897617b110ed75c9d9"}
+                       :sha "c97967996cd6ddb5a587a34a96e53dd76f9509ac"}
         caesarhu/unqualify {:git/url "https://github.com/caesarhu/unqualify.git"
                             :sha "f07af40ba6f994571bb5f7402cfa91dfdb06b28e"}
         kwrooijen/gungnir {:mvn/version "0.0.1-SNAPSHOT"}
@@ -28,17 +28,15 @@
                      org.slf4j/jcl-over-slf4j {:mvn/version "1.7.30"}
                      org.slf4j/log4j-over-slf4j {:mvn/version "1.7.30"}
                      org.slf4j/jul-to-slf4j {:mvn/version "1.7.30"}
+                     lambdaisland/kaocha {:mvn/version "1.0.732"}
                      ;;;
                      taiwan-id/taiwan-id {:mvn/version "0.4.1"}}
         :jvm-opts ["-Dmalli.registry/type=custom"]}
-  :test {:extra-paths ["test"]
-         :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}}}
-  :runner
-  {:extra-deps {com.cognitect/test-runner
-                {:git/url "https://github.com/cognitect-labs/test-runner"
-                 :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}}
-   :main-opts ["-m" "cognitect.test-runner"
-               "-d" "test"]}
+  :test {:extra-paths ["dev/src" "test" "dev/resources"]
+         :jvm-opts ["-Dmalli.registry/type=custom"]
+         :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}
+                      taiwan-id/taiwan-id {:mvn/version "0.4.1"}
+                      lambdaisland/kaocha {:mvn/version "1.0.732"}}}
   :jar {:replace-deps {seancorfield/depstar {:mvn/version "2.0.171"}}
         :exec-fn hf.depstar/jar
         :exec-args {:jar "gungnir-tools.jar" :sync-pom true}}

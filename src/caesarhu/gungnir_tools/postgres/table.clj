@@ -121,9 +121,9 @@
       base)))
 
 (s/fdef models-table-edn
-  :args (s/alt :1arity
+  :args (s/alt :arity-1
                (s/cat :models (s/coll-of :gungnir/model))
-               :0arity
+               :arity-0
                (s/cat)))
 (defn models-table-edn
   ([models]
