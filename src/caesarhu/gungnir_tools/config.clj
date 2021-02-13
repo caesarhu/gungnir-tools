@@ -3,8 +3,6 @@
 
 (defonce schema-registry* (atom nil))
 
-(defonce schema-edn-file* (atom "schema.edn"))
-
 (defonce tools-schema* (atom nil))
 
 (defonce translate-key*

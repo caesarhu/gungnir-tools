@@ -17,6 +17,7 @@
             [aero.core :as aero]
             [java-time :as jt]
             [kaocha.repl :as k]
+            [clojure.tools.gitlibs :as gl]
             [malli.time :refer [time-schema]]
             [malli.employee :refer [employee-schema]]
             [caesarhu.gungnir-tools.config :as config]
@@ -34,6 +35,7 @@
 
 (defn init-schema!
   []
+  (read-tools-schema schema-file)
   (schema/base-schema)
   (schema/register-map! time-schema)
   (schema/register-map! employee-schema)
@@ -62,6 +64,5 @@
   (instrument)
   (println "Reset finished..."))
 
-(read-tools-schema schema-file)
-(init-schema!)
-;(instrument)
+;(init-schema!)
+
