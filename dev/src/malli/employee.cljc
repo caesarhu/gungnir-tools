@@ -1,7 +1,7 @@
 (ns malli.employee
   (:require
-    [malli.address :as addr]
     [clojure.test.check.generators :as gen]
+    [malli.address :as addr]
     [malli.core :as m]
     [taiwan-id.core :as tid]))
 
@@ -16,6 +16,7 @@
 
 (def company-id
   [:re {:error/message "必須是員工編號-5位數字或Z開頭4位數字"} #"^[Z\d]\d{4}$"])
+
 
 (def bank-id
   [:re {:error/message "必須是銀行代號-7位數字"} #"^\d{7}$"])

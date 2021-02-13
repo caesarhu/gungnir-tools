@@ -1,9 +1,11 @@
 (ns caesarhu.gungnir-tools.gungnir.upsert
-  (:require [gungnir.database :as gd]
-            [gungnir.model :as gm]
-            [honeysql.helpers :as sql]
-            [honeysql-postgres.helpers :as psqlh]
-            [caesarhu.unqualify :refer [unqualify]]))
+  (:require
+    [caesarhu.unqualify :refer [unqualify]]
+    [gungnir.database :as gd]
+    [gungnir.model :as gm]
+    [honeysql-postgres.helpers :as psqlh]
+    [honeysql.helpers :as sql]))
+
 
 (defn upsert-sql
   [table row conflict]
@@ -13,6 +15,7 @@
                            (psqlh/on-conflict {} (unqualify conflict))
                            (->> (keys row)
                                 (map unqualify))))))
+
 
 (defn upsert!
   "Upsert a row based on the `changeset` provided. This function assumes

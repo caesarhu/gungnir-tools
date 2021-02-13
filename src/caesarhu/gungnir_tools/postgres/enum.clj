@@ -1,9 +1,10 @@
 (ns caesarhu.gungnir-tools.postgres.enum
   (:require
-    [caesarhu.gungnir-tools.utils :as utils]
     [caesarhu.gungnir-tools.config :refer [ragtime-key*]]
-    [malli.core :as m]
-    [caesarhu.gungnir-tools.schema :refer [schema-enums]]))
+    [caesarhu.gungnir-tools.schema :refer [schema-enums]]
+    [caesarhu.gungnir-tools.utils :as utils]
+    [malli.core :as m]))
+
 
 (defn get-enum-name
   [enum]
@@ -41,6 +42,7 @@
     (if id
       (assoc base :id id)
       base)))
+
 
 (defn models-enum-edn
   ([enums]

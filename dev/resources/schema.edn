@@ -1,4 +1,11 @@
-{:enum {:enum-gender
+{:translate-key :locale/zh-tw
+ :assign-type-key :postgres/type
+ :ragtime-key :ragtime/id
+ :postgres-keys {:column-call-set (set [:primary-key :postgres/unique :postgres/default :postgres/references])
+                 :index-key :postgres/create-index}
+ :extra-type caesarhu.malli-tools.time/time-schemas
+
+ :enum {:enum-gender
         [:enum
          {:error/message "should be: 男|女"
           :ragtime/id "100-enum-gender"
@@ -55,9 +62,9 @@
          "上期" "下期"]}
  :model {:employee
          [:map {:locale/zh-tw "員工基本資料檔"
-                :create-index [:index-name :idx-employee-by-name
-                               :table :employee
-                               :column :name]
+                :postgres/create-index [:index-name :idx-employee-by-name
+                                        :table :employee
+                                        :column :name]
                 :ragtime/id "201-employee"
                 :has-many {:employee/changes {:model :change :foreign-key :change/employee-id}}}
           [:employee/id {:primary-key true
@@ -68,7 +75,7 @@
           [:employee/company-id {:locale/zh-tw "員工編號"
                                  :postgres/unique true} :employee/company-id]
           [:employee/name {:locale/zh-tw "姓名"} :taiwan-name]
-          [:employee/birthday {:locale/zh-tw "生日"} :local-date]
+          [:employee/birthday {:locale/zh-tw "生日"} :date]
           [:employee/gender {:locale/zh-tw "性別"
                              :before-save [:enum/as-other]} :enum-gender]
           [:employee/direct-kind {:locale/zh-tw "間直接"
@@ -109,18 +116,18 @@
           [:employee/memo {:locale/zh-tw "備註"
                            :optional true} [:maybe string?]]
           [:employee/created-at {:locale/zh-tw "建立時間"
-                                 :auto true} :local-date-time]
+                                 :auto true} :date-time]
           [:employee/updated-at {:locale/zh-tw "修改時間"
-                                 :auto true} :local-date-time]
+                                 :auto true} :date-time]
           [:employee/bank-name {:locale/zh-tw "員工銀行名稱"
                                 :virtual true} string?]]
 
          :change
          [:map {:locale/zh-tw "員工異動檔"
                 :ragtime/id "202-change"
-                :create-index [:index-name :idx-change-by-employee-id
-                               :table :change
-                               :column :employee-id]
+                :postgres/create-index [:index-name :idx-change-by-employee-id
+                                        :table :change
+                                        :column :employee-id]
                 :belongs-to {:change/employee {:model :employee :foreign-key :change/employee-id}}}
           [:change/id {:primary-key true
                        :auto true
@@ -132,9 +139,9 @@
           [:change/change-kind {:locale/zh-tw "異動類別"
                                 :before-save [:enum/as-other]} :enum-change]
           [:change/change-day {:locale/zh-tw "異動日期"
-                               :postgres/default :CURRENT_DATE} :local-date]
+                               :postgres/default :CURRENT_DATE} :date]
           [:change/created-at {:locale/zh-tw "建立時間"
-                               :auto true} :local-date-time]
+                               :auto true} :date-time]
           [:change/memo {:locale/zh-tw "備註"
                          :optional true} [:maybe string?]]]
 

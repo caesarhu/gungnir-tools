@@ -1,9 +1,11 @@
 (ns caesarhu.gungnir-tools.gungnir.types
-  (:require [malli.core :as m]
-            [malli.registry :as mr]
-            [caesarhu.gungnir-tools.schema :refer [get-schemas is-enum?]]
-            [caesarhu.gungnir-tools.postgres.enum :as enum]
-            [caesarhu.gungnir-tools.config :refer [postgres-keys* malli-type-keys* assign-type-key*]]))
+  (:require
+    [caesarhu.gungnir-tools.config :refer [postgres-keys* malli-type-keys* assign-type-key*]]
+    [caesarhu.gungnir-tools.postgres.enum :as enum]
+    [caesarhu.gungnir-tools.schema :refer [get-schemas is-enum?]]
+    [malli.core :as m]
+    [malli.registry :as mr]))
+
 
 (defn field-type
   [field]
@@ -24,6 +26,17 @@
                               {:cause ::field-type
                                :schema schema}))))))
 
+(def type-transfrom-table
+  [{:malli-types (set [:re :string 'string?]) :graphql-type 'String :postgres-type :text}]
+  [{:malli-types (set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int])
+    :graphql-type 'Int :postgres-type :bigint}]
+  [{:malli-types (set ['float?, 'double?, 'decimal?, :double]) :graphql-type 'BigDecimal :postgres-type :decimal}]
+  [{:malli-types (set [:date]) :graphql-type 'Date :postgres-type :date}]
+  [{:malli-types (set [:date-time 'inst?]) :graphql-type 'DateTime :postgres-type :timestamp}]
+  [{:malli-types (set [:boolean 'boolean?]) :graphql-type 'Boolean :postgres-type :boolean}]
+  [{:malli-types (set ['bytes?]) :graphql-type 'String :postgres-type :bytea}])
+
+
 (defn transform-type
   [type-table type]
   (let [transform (fn [[type-set to-type]]
@@ -36,10 +49,11 @@
   [[(set [:re :string 'string?]) (symbol :String)]
    [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) (symbol :Int)]
    [(set ['float?, 'double?, 'decimal?, :double]) (symbol :BigDecimal)]
-   [(set [:local-date]) (symbol :Date)]
-   [(set [:local-date-time 'inst?]) (symbol :DateTime)]
+   [(set [:date]) (symbol :Date)]
+   [(set [:date-time 'inst?]) (symbol :DateTime)]
    [(set [:boolean 'boolean?]) (symbol :Boolean)]
    [(set ['bytes?]) (symbol :String)]])
+
 
 (defn ->graphql-type
   [type]
@@ -50,14 +64,16 @@
                           {:cause ::->graphql-type
                            :type type}))))
 
+
 (def postgres-type-table
   [[(set [:re :string 'string?]) :text]
    [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) :bigint]
    [(set ['float?, 'double?, 'decimal?, :double]) :decimal]
-   [(set [:local-date]) :date]
-   [(set [:local-date-time 'inst?]) :timestamp]
+   [(set [:date]) :date]
+   [(set [:date-time 'inst?]) :timestamp]
    [(set [:boolean 'boolean?]) :boolean]
    [(set ['bytes?]) :bytea]])
+
 
 (defn ->postgres-type
   [type]

@@ -1,22 +1,15 @@
-(ns caesarhu.gungnir-tools.config
-  (:require [malli.core :as m]))
+(ns caesarhu.gungnir-tools.config)
 
 (defonce schema-registry* (atom nil))
 
 (defonce tools-schema* (atom nil))
 
-(defonce translate-key*
-  (atom :locale/zh-tw))
+(defonce translate-key* (atom nil))
 
-(defonce assign-type-key*
-  (atom :postgres/type))
+(defonce assign-type-key* (atom nil))
 
-(defonce postgres-keys*
-  (atom {:column-call-set (set [:primary-key :postgres/unique :postgres/default :postgres/references])}))
+(defonce postgres-keys* (atom nil))
 
-(defonce ragtime-key*
-  (atom :ragtime/id))
+(defonce ragtime-key* (atom nil))
 
-(defonce malli-type-keys*
-  (atom (set (concat (keys (m/type-schemas))
-                     [:local-date :local-date-time]))))
+(defonce malli-type-keys* (atom nil))

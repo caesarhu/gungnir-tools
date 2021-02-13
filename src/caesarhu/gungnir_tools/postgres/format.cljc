@@ -1,8 +1,8 @@
 (ns caesarhu.gungnir-tools.postgres.format
   (:require
     [caesarhu.gungnir-tools.utils :refer [comma-join-args to-sql-arg]]
-    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
     [honeysql-postgres.format]
+    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
     ; must require honeysql-postgres.format
     [honeysql.helpers :as sqlh]))
 

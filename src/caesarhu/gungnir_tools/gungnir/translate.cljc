@@ -1,11 +1,12 @@
 (ns caesarhu.gungnir-tools.gungnir.translate
   (:require
+    [caesarhu.gungnir-tools.config :refer [translate-key*]]
     [clojure.set]
-    [malli.core :as m]
-    [medley.core :as medley]
     [gungnir.model :as gm]
     [gungnir.util.malli :refer [child-properties]]
-    [caesarhu.gungnir-tools.config :refer [translate-key*]]))
+    [malli.core :as m]
+    [medley.core :as medley]))
+
 
 (defn model->dict
   [model]
@@ -22,6 +23,7 @@
                       (medley/filter-vals some?))]
     (merge half-map (clojure.set/map-invert half-map))))
 
+
 (defn models->dict
   ([models]
    (->> models
@@ -29,6 +31,7 @@
         (apply merge)))
   ([]
    (models->dict (vals @gm/models))))
+
 
 (defn translate
   [dict k]

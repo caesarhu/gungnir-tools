@@ -1,19 +1,22 @@
 (ns caesarhu.gungnir-tools.postgres.table
-  (:require [caesarhu.gungnir-tools.config :refer :all]
-            [caesarhu.gungnir-tools.gungnir.types :refer [->postgres-type field-type]]
-            [caesarhu.gungnir-tools.postgres.format]
-            [honeysql.core :as sql]
-            [malli.core :as m]
-            [gungnir.model :as gm]
-            [gungnir.field :as gf]
-            [honeysql-postgres.helpers :as psqlh]
-            [caesarhu.gungnir-tools.utils :as utils]
-            [clojure.spec.alpha :as s]
-            [gungnir.spec]))
+  (:require
+    [caesarhu.gungnir-tools.config :refer :all]
+    [caesarhu.gungnir-tools.gungnir.types :refer [->postgres-type field-type]]
+    [caesarhu.gungnir-tools.postgres.format]
+    [caesarhu.gungnir-tools.utils :as utils]
+    [clojure.spec.alpha :as s]
+    [gungnir.field :as gf]
+    [gungnir.model :as gm]
+    [gungnir.spec]
+    [honeysql-postgres.helpers :as psqlh]
+    [honeysql.core :as sql]
+    [malli.core :as m]))
+
 
 (defn field->postgres-type
   [field]
   (-> field field-type ->postgres-type))
+
 
 (defn column-null
   [field]
@@ -33,6 +36,7 @@
         (= :date f-type) (sql/call :default :CURRENT_DATE)
         (= :timestamp f-type) (sql/call :default :CURRENT_TIMESTAMP)))))
 
+
 (defn sql-call
   [property-key property]
   (when property
@@ -41,6 +45,7 @@
         (true? property) (sql/call s-key)
         (coll? property) (apply sql/call s-key property)
         :else (sql/call s-key property)))))
+
 
 (defn column-sql-call
   [field]
@@ -54,6 +59,7 @@
     (->> (map column-attr (keys properties))
          (filter some?))))
 
+
 (defn field->column
   [field]
   (let [args-fn (fn [field]
@@ -65,8 +71,11 @@
            flatten
            vec))))
 
+
 (s/fdef model-columns
-  :args (s/cat :model :gungnir/model))
+        :args (s/cat :model :gungnir/model))
+
+
 (defn model-columns
   [model]
   (->> model
@@ -75,8 +84,11 @@
        (map field->column)
        (filter some?)))
 
+
 (s/fdef create-table
-  :args (s/cat :model :gungnir/model))
+        :args (s/cat :model :gungnir/model))
+
+
 (defn create-table
   [model]
   (let [sql-map (-> (psqlh/create-table {} (gm/table model))
@@ -85,29 +97,39 @@
         first
         (str ";"))))
 
+
 (s/fdef drop-table
-  :args (s/cat :model :gungnir/model))
+        :args (s/cat :model :gungnir/model))
+
+
 (defn drop-table
   [model]
   (str "DROP TABLE IF EXISTS "
        (-> model gm/table utils/to-sql-arg)
        " CASCADE;"))
 
+
 (s/fdef create-index
-  :args (s/cat :model :gungnir/model))
+        :args (s/cat :model :gungnir/model))
+
+
 (defn create-index
   [model]
-  (when-let [index-property (-> (gm/properties model)
-                                :create-index)]
-    (if (coll? (first index-property))
-      (->> (map #(apply sql/call :create-index %) index-property)
-           (map sql/format)
-           flatten)
-      (->> (apply sql/call :create-index index-property)
-           sql/format))))
+  (let [index-key (get-in @tools-schema* [:postgres-keys :index-key])]
+    (when-let [index-property (-> (gm/properties model)
+                                  index-key)]
+      (if (coll? (first index-property))
+        (->> (map #(apply sql/call index-key %) index-property)
+             (map sql/format)
+             flatten)
+        (->> (apply sql/call index-key index-property)
+             sql/format)))))
+
 
 (s/fdef generate-table-edn
-  :args (s/cat :model :gungnir/model))
+        :args (s/cat :model :gungnir/model))
+
+
 (defn generate-table-edn
   [model]
   (let [base {:up (->> (vector (create-table model) (create-index model))
@@ -120,11 +142,14 @@
       (assoc base :id id)
       base)))
 
+
 (s/fdef models-table-edn
-  :args (s/alt :arity-1
-               (s/cat :models (s/coll-of :gungnir/model))
-               :arity-0
-               (s/cat)))
+        :args (s/alt :arity-1
+                     (s/cat :models (s/coll-of :gungnir/model))
+                     :arity-0
+                     (s/cat)))
+
+
 (defn models-table-edn
   ([models]
    (map generate-table-edn models))
