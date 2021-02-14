@@ -27,58 +27,38 @@
                                :schema schema}))))))
 
 (def type-transfrom-table
-  [{:malli-types (set [:re :string 'string?]) :graphql-type 'String :postgres-type :text}]
-  [{:malli-types (set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int])
-    :graphql-type 'Int :postgres-type :bigint}]
-  [{:malli-types (set ['float?, 'double?, 'decimal?, :double]) :graphql-type 'BigDecimal :postgres-type :decimal}]
-  [{:malli-types (set [:date]) :graphql-type 'Date :postgres-type :date}]
-  [{:malli-types (set [:date-time 'inst?]) :graphql-type 'DateTime :postgres-type :timestamp}]
-  [{:malli-types (set [:boolean 'boolean?]) :graphql-type 'Boolean :postgres-type :boolean}]
-  [{:malli-types (set ['bytes?]) :graphql-type 'String :postgres-type :bytea}])
+  [{:malli-types (set [:re :string 'string?]) :graphql-type 'String :postgres-type :text}
+   {:malli-types (set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int])
+    :graphql-type 'Int :postgres-type :bigint}
+   {:malli-types (set ['float?, 'double?, 'decimal?, :double]) :graphql-type 'BigDecimal :postgres-type :decimal}
+   {:malli-types (set [:date]) :graphql-type 'Date :postgres-type :date}
+   {:malli-types (set [:date-time 'inst?]) :graphql-type 'DateTime :postgres-type :timestamp}
+   {:malli-types (set [:boolean 'boolean?]) :graphql-type 'Boolean :postgres-type :boolean}
+   {:malli-types (set ['bytes?]) :graphql-type 'String :postgres-type :bytea}])
 
+(defn find-type
+  [type transform-key entry]
+  (let [malli-types (:malli-types entry)]
+    (when (contains? malli-types type)
+      (get entry transform-key))))
 
 (defn transform-type
-  [type-table type]
-  (let [transform (fn [[type-set to-type]]
-                    (when (type-set type)
-                      to-type))]
-    (some transform type-table)))
-
-
-(def graphql-type-table
-  [[(set [:re :string 'string?]) (symbol :String)]
-   [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) (symbol :Int)]
-   [(set ['float?, 'double?, 'decimal?, :double]) (symbol :BigDecimal)]
-   [(set [:date]) (symbol :Date)]
-   [(set [:date-time 'inst?]) (symbol :DateTime)]
-   [(set [:boolean 'boolean?]) (symbol :Boolean)]
-   [(set ['bytes?]) (symbol :String)]])
-
+  [type transform-key]
+  (some #(find-type type transform-key %) type-transfrom-table))
 
 (defn ->graphql-type
   [type]
   (cond
-    (transform-type graphql-type-table type) (transform-type graphql-type-table type)
-    (is-enum? type) (symbol :String)
+    (transform-type type :graphql-type) (transform-type type :graphql-type)
+    (is-enum? type) 'String
     :else (throw (ex-info "field graphql-type parse error!"
                           {:cause ::->graphql-type
                            :type type}))))
 
-
-(def postgres-type-table
-  [[(set [:re :string 'string?]) :text]
-   [(set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int]) :bigint]
-   [(set ['float?, 'double?, 'decimal?, :double]) :decimal]
-   [(set [:date]) :date]
-   [(set [:date-time 'inst?]) :timestamp]
-   [(set [:boolean 'boolean?]) :boolean]
-   [(set ['bytes?]) :bytea]])
-
-
 (defn ->postgres-type
   [type]
   (cond
-    (transform-type postgres-type-table type) (transform-type postgres-type-table type)
+    (transform-type type :postgres-type) (transform-type type :postgres-type)
     (is-enum? type) type
     :else (throw (ex-info "field postgres-type parse error!"
                           {:cause ::>postgres-type
