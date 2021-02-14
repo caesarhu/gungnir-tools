@@ -26,6 +26,7 @@
                               {:cause ::field-type
                                :schema schema}))))))
 
+
 (def type-transfrom-table
   [{:malli-types (set [:re :string 'string?]) :graphql-type 'String :postgres-type :text}
    {:malli-types (set ['integer?, 'int?, 'pos-int?, 'neg-int?, 'nat-int?, :int])
@@ -36,15 +37,18 @@
    {:malli-types (set [:boolean 'boolean?]) :graphql-type 'Boolean :postgres-type :boolean}
    {:malli-types (set ['bytes?]) :graphql-type 'String :postgres-type :bytea}])
 
+
 (defn find-type
   [type transform-key entry]
   (let [malli-types (:malli-types entry)]
     (when (contains? malli-types type)
       (get entry transform-key))))
 
+
 (defn transform-type
   [type transform-key]
   (some #(find-type type transform-key %) type-transfrom-table))
+
 
 (defn ->graphql-type
   [type]
@@ -54,6 +58,7 @@
     :else (throw (ex-info "field graphql-type parse error!"
                           {:cause ::->graphql-type
                            :type type}))))
+
 
 (defn ->postgres-type
   [type]
