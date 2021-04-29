@@ -1,10 +1,9 @@
 (ns caesarhu.gungnir-tools.transform
   (:require
     [caesarhu.gungnir-tools.gungnir.translate :refer [model->dict]]
-    [caesarhu.gungnir-tools.lacinia :refer [model->object models->objects]]
-    [caesarhu.gungnir-tools.postgres.table :refer [generate-table-edn models-table-edn]]
+    [caesarhu.gungnir-tools.lacinia :refer [model->object]]
+    [caesarhu.gungnir-tools.postgres.table :refer [generate-table-edn]]
     [clojure.spec.alpha :as s]
-    [malli.core :as m]
     [malli.transform :as mt]
     [malli.util :as mu]))
 

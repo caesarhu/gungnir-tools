@@ -1,12 +1,12 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.10.3"}
-        metosin/malli {:mvn/version "0.3.0"}
+        metosin/malli {:mvn/version "0.5.0"}
         caesarhu/unqualify {:git/url "https://github.com/caesarhu/unqualify.git"
                             :sha "f07af40ba6f994571bb5f7402cfa91dfdb06b28e"}
         caesarhu/malli-tools {:git/url "https://github.com/caesarhu/malli-tools.git"
                               :sha "916bc1a36de348fe6570228035c33205675fbeaf"}
         kwrooijen/gungnir {:mvn/version "0.0.1-SNAPSHOT"}
-        juxt/clip {:mvn/version "0.21.0"}
+        juxt/clip {:mvn/version "0.22.0"}
         aero/aero {:mvn/version "1.1.6"}
         org.clojure/tools.namespace {:mvn/version "1.1.0"}
         camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"}
@@ -20,7 +20,7 @@
  {:dev {:extra-paths ["dev/src" "test" "dev/resources"]
         :extra-deps {expound/expound {:mvn/version "0.8.9"}
                      orchestra/orchestra {:mvn/version "2021.01.01-1"}
-                     org.clojure/tools.gitlibs {:mvn/version "2.1.139"}
+                     org.clojure/tools.gitlibs {:mvn/version "2.3.167"}
                      com.gfredericks/test.chuck {:mvn/version "0.2.10"}
                      jedi-time/jedi-time {:mvn/version "0.2.1"}
                      ;;; log
@@ -38,7 +38,7 @@
          :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}
                       taiwan-id/taiwan-id {:mvn/version "0.4.1"}
                       lambdaisland/kaocha {:mvn/version "1.0.829"}}}
-  :jar {:replace-deps {seancorfield/depstar {:mvn/version "2.0.193"}}
+  :jar {:replace-deps {seancorfield/depstar {:mvn/version "2.0.216"}}
         :exec-fn hf.depstar/jar
         :exec-args {:jar "gungnir-tools.jar" :sync-pom true}}
   :install {:replace-deps {slipset/deps-deploy {:mvn/version "0.1.5"}}

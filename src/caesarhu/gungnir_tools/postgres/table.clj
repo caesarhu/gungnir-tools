@@ -1,6 +1,6 @@
 (ns caesarhu.gungnir-tools.postgres.table
   (:require
-    [caesarhu.gungnir-tools.config :refer :all]
+    [caesarhu.gungnir-tools.config :refer [postgres-keys* ragtime-key* tools-schema*]]
     [caesarhu.gungnir-tools.gungnir.types :refer [->postgres-type field-type]]
     [caesarhu.gungnir-tools.postgres.format]
     [caesarhu.gungnir-tools.utils :as utils]

@@ -13,7 +13,7 @@
   (let [table-locale (@translate-key* (some-> model m/properties))
         table-map {(gm/table model) (keyword table-locale)}
         locale-fn (fn [child]
-                    (if-let [child-locale (@translate-key* (some-> child child-properties))]
+                    (when-let [child-locale (@translate-key* (some-> child child-properties))]
                       (keyword table-locale child-locale)))
         half-map (->> model
                       (m/children)

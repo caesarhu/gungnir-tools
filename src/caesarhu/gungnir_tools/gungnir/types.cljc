@@ -1,8 +1,8 @@
 (ns caesarhu.gungnir-tools.gungnir.types
   (:require
-    [caesarhu.gungnir-tools.config :refer [postgres-keys* malli-type-keys* assign-type-key*]]
+    [caesarhu.gungnir-tools.config :refer [malli-type-keys* assign-type-key*]]
     [caesarhu.gungnir-tools.postgres.enum :as enum]
-    [caesarhu.gungnir-tools.schema :refer [get-schemas is-enum?]]
+    [caesarhu.gungnir-tools.schema :refer [is-enum?]]
     [malli.core :as m]
     [malli.registry :as mr]))
 

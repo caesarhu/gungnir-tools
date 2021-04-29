@@ -2,7 +2,7 @@
   (:require
     [caesarhu.gungnir-tools.utils :refer [comma-join-args to-sql-arg]]
     [honeysql-postgres.format]
-    [honeysql.format :as sqlf :refer [fn-handler format-clause format-modifiers]]
+    [honeysql.format :as sqlf :refer [fn-handler]]
     ; must require honeysql-postgres.format
     [honeysql.helpers :as sqlh]))
 
